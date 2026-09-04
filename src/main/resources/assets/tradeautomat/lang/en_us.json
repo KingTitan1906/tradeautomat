@@ -1,8 +1,13 @@
 {
-  "item.tradeautomat.ui_test_item": "Trade Automat UI Test",
+  "item.tradeautomat.module_storage": "Module Storage",
+  "item.tradeautomat.module_trade": "Module Trade",
+  "item.tradeautomat.module_offer": "Module Offer",
+  "item.tradeautomat.keycard": "Keycard",
 
-  "item.tradeautomat.module_storage.tooltip": "\\u00A77Module level: %s",
-  "item.tradeautomat.keycard.tooltip": "\\u00A77Code: %s",
+  "item.tradeautomat.module_storage.tooltip": "Module level: %s",
+  "item.tradeautomat.module_trade.tooltip": "Module level: %s",
+  "item.tradeautomat.module_offer.tooltip": "Module level: %s",
+  "item.tradeautomat.keycard.tooltip": "Code: %s",
 
   "tradeautomat.setup_password": "Setup Password",
   "tradeautomat.enter_code": "Enter Code",

@@ -1,6 +1,7 @@
 package me.wuntare.tradeautomat.block.entity;
 
-import me.wuntare.tradeautomat.client.gui.AutomatStorageMenu;
+import me.wuntare.tradeautomat.gui.AutomatStorageMenu;
+import me.wuntare.tradeautomat.model.TradeOffer;
 import me.wuntare.tradeautomat.registry.ModBlockEntities;
 import me.wuntare.tradeautomat.registry.ModDataComponents;
 import me.wuntare.tradeautomat.registry.ModItems;
@@ -24,12 +25,18 @@ import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class TradeAutomatEntity extends BlockEntity implements ExtendedMenuProvider<BlockPos> {
     private static final int MODULES_SLOT_COUNT = 18;
     private static final int BASE_SLOT_COUNT = 4;
     private static final int MAX_SLOT_COUNT = 148;
+    private static final int BASE_TRADE_OFFER_COUNT = 1;
+    private static final int MAX_TRADE_OFFER_COUNT = 37;
 
     private int unlockedSlots = BASE_SLOT_COUNT;
+    private int unlockedTradeOffers = BASE_TRADE_OFFER_COUNT;
 
     private String code = "";
     private final SimpleContainer invModule = new SimpleContainer(MODULES_SLOT_COUNT) {
@@ -54,6 +61,7 @@ public class TradeAutomatEntity extends BlockEntity implements ExtendedMenuProvi
             TradeAutomatEntity.this.setChanged();
         }
     };
+    private List<TradeOffer> trades = new ArrayList<>();
 
     public TradeAutomatEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.TRADE_AUTOMAT_ENTITY, pos, state);
@@ -147,6 +155,24 @@ public class TradeAutomatEntity extends BlockEntity implements ExtendedMenuProvi
     public int getUnlockedSlots() {
         return this.unlockedSlots;
     }
+    public int getUnlockedTradeOffers() { return this.unlockedTradeOffers; }
+
+    public List<TradeOffer> getTrades() {
+        return this.trades;
+    }
+
+    public void setTrades(List<TradeOffer> newTrades) {
+        this.trades.clear();
+        for (TradeOffer offer : newTrades) {
+            this.trades.add(offer.copy());
+        }
+        this.setChanged();
+    }
+
+    public void addTrade(TradeOffer offer) {
+        this.trades.add(offer);
+        this.setChanged();
+    }
 
     @Override
     public @Nullable AbstractContainerMenu createMenu(int containerId, Inventory inventory, Player player) {
@@ -178,6 +204,7 @@ public class TradeAutomatEntity extends BlockEntity implements ExtendedMenuProvi
         output.store("input_inv", ItemStack.OPTIONAL_CODEC.listOf(), this.invInput.getItems());
         output.store("output_inv", ItemStack.OPTIONAL_CODEC.listOf(), this.invOutput.getItems());
         output.store("module_inv", ItemStack.OPTIONAL_CODEC.listOf(), this.invModule.getItems());
+        output.store("trades", TradeOffer.CODEC.listOf(), this.trades);
     }
 
     @Override
@@ -203,10 +230,15 @@ public class TradeAutomatEntity extends BlockEntity implements ExtendedMenuProvi
             }
         });
 
+        input.read("trades", TradeOffer.CODEC.listOf()).ifPresent(list -> {
+            this.trades.clear();
+            this.trades.addAll(list);
+        });
+
         this.recalculateModules();
     }
 
     public boolean isEmpty() {
-        return this.invInput.isEmpty() && this.invOutput.isEmpty() && this.invModule.isEmpty() && this.code.isEmpty();
+        return this.invInput.isEmpty() && this.invOutput.isEmpty() && this.invModule.isEmpty() && this.code.isEmpty() && this.trades.isEmpty();
     }
 }

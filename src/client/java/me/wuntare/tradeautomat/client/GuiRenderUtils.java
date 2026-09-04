@@ -17,6 +17,10 @@ public final class GuiRenderUtils {
             "tradeautomat",
             "textures/gui/hud-atlas.png"
     );
+    private static final Identifier GUI_ARROW = Identifier.fromNamespaceAndPath(
+            "tradeautomat",
+            "textures/gui/arrow.png"
+    );
 
     private GuiRenderUtils() {}
 
@@ -55,7 +59,7 @@ public final class GuiRenderUtils {
 
             drawSlot(graphics, slotX, slotY);
 
-            boolean isLocked = !slot.mayPlace(new ItemStack(net.minecraft.world.item.Items.DIRT));
+            boolean isLocked = !slot.mayPlace(ItemStack.EMPTY);
 
             if (isLocked) {
                 graphics.fill(slotX, slotY, slotX + 16, slotY + 16, 0x80000000);
@@ -75,6 +79,10 @@ public final class GuiRenderUtils {
                 index++;
             }
         }
+    }
+
+    public static void drawArrow(GuiGraphicsExtractor graphics, int x, int y) {
+        graphics.blit(RenderPipelines.GUI_TEXTURED, GUI_ARROW, x, y, 0, 0, 16, 13, 16, 13, 16, 13);
     }
 
     private static void drawPart(

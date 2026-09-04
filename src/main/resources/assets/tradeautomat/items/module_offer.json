@@ -1,6 +1,6 @@
 {
   "model": {
     "type": "minecraft:model",
-    "model": "tradeautomat:item/ui_test_item"
+    "model": "tradeautomat:item/module_offer"
   }
 }

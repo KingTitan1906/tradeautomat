@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "tradeautomat:block/trade_automat"
+    }
+  }
+}

@@ -1,4 +1,4 @@
-package me.wuntare.tradeautomat.client.gui;
+package me.wuntare.tradeautomat.gui;
 
 import me.wuntare.tradeautomat.block.entity.TradeAutomatEntity;
 import me.wuntare.tradeautomat.item.ModuleStorage;

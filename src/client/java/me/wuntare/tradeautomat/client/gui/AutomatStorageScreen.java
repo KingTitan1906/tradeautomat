@@ -1,6 +1,7 @@
 package me.wuntare.tradeautomat.client.gui;
 
 import me.wuntare.tradeautomat.client.GuiRenderUtils;
+import me.wuntare.tradeautomat.gui.AutomatStorageMenu;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;

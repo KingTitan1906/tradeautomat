@@ -10,8 +10,8 @@ import net.minecraft.world.item.component.TooltipDisplay;
 
 import java.util.function.Consumer;
 
-public class ModuleStorage extends Item {
-    public ModuleStorage(Properties props) {
+public class ModuleTrade extends Item {
+    public ModuleTrade(Properties props) {
         props.stacksTo(1);
         props.component(ModDataComponents.MODULE_LEVEL, 1);
         super(props);
@@ -33,7 +33,7 @@ public class ModuleStorage extends Item {
     @Override
     public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
         if (itemStack.has(ModDataComponents.MODULE_LEVEL)) {
-            builder.accept(Component.translatable("item.tradeautomat.module_storage.tooltip", getModuleLevel(itemStack)).withStyle(ChatFormatting.GRAY));
+            builder.accept(Component.translatable("item.tradeautomat.module_trade.tooltip", getModuleLevel(itemStack)).withStyle(ChatFormatting.GRAY));
         }
         super.appendHoverText(itemStack, context, display, builder, tooltipFlag);
     }
