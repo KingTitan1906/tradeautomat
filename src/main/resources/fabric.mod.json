@@ -1,0 +1,36 @@
+{
+	"schemaVersion": 1,
+	"id": "tradeautomat",
+	"version": "${version}",
+	"name": "TradeAutomat",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Wuntare"
+	],
+	"license": "CC0-1.0",
+	"icon": "assets/tradeautomat/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+          "me.wuntare.tradeautomat.Main"
+		],
+		"client": [
+          "me.wuntare.tradeautomat.client.MainClient"
+		],
+        "fabric-datagen": [
+          "me.wuntare.tradeautomat.client.ModDataGenerator"
+        ]
+	},
+	"mixins": [
+		{
+			"config": "tradeautomat.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.19.5",
+		"minecraft": "~26.2",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}

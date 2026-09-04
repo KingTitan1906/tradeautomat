@@ -1,0 +1,12 @@
+{
+  "item.tradeautomat.ui_test_item": "Trade Automat UI Test",
+
+  "item.tradeautomat.module_storage.tooltip": "\\u00A77Module level: %s",
+  "item.tradeautomat.keycard.tooltip": "\\u00A77Code: %s",
+
+  "tradeautomat.setup_password": "Setup Password",
+  "tradeautomat.enter_code": "Enter Code",
+  "tradeautomat.edit_code": "Edit Code",
+  "tradeautomat.submit": "Submit",
+  "tradeautomat.inventory": "Inventory"
+}

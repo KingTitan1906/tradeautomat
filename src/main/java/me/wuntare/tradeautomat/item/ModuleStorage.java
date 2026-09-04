@@ -1,0 +1,39 @@
+package me.wuntare.tradeautomat.item;
+
+import me.wuntare.tradeautomat.registry.ModDataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.TooltipDisplay;
+
+import java.util.function.Consumer;
+
+public class ModuleStorage extends Item {
+    public ModuleStorage(Properties props) {
+        props.stacksTo(1);
+        props.component(ModDataComponents.MODULE_LEVEL, 1);
+        super(props);
+    }
+
+    public int getModuleLevel(ItemStack itemStack) {
+        return itemStack.getOrDefault(ModDataComponents.MODULE_LEVEL, 1);
+    }
+
+    public int updateModuleLevel(ItemStack itemStack, int level) {
+        int currentLevel = getModuleLevel(itemStack);
+        if (level > currentLevel) {
+            itemStack.set(ModDataComponents.MODULE_LEVEL, level);
+            return level;
+        }
+        return currentLevel;
+    }
+
+    @Override
+    public void appendHoverText(ItemStack itemStack, TooltipContext context, TooltipDisplay display, Consumer<Component> builder, TooltipFlag tooltipFlag) {
+        if (itemStack.has(ModDataComponents.MODULE_LEVEL)) {
+            builder.accept(Component.translatable("item.tradeautomat.module_storage.tooltip", getModuleLevel(itemStack)));
+        }
+        super.appendHoverText(itemStack, context, display, builder, tooltipFlag);
+    }
+}

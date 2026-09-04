@@ -1,0 +1,6 @@
+{
+  "model": {
+    "type": "minecraft:model",
+    "model": "tradeautomat:item/ui_test_item"
+  }
+}
