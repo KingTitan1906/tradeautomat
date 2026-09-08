@@ -1,21 +1,27 @@
 package me.wuntare.tradeautomat.client.gui;
 
 import me.wuntare.tradeautomat.client.GuiRenderUtils;
-import me.wuntare.tradeautomat.gui.AutomatTradeSetupMenu;
+import me.wuntare.tradeautomat.gui.AutomatTradeMenu;
 import me.wuntare.tradeautomat.client.gui.util.ScrollController;
+import me.wuntare.tradeautomat.network.ExecuteTradePayload;
 import me.wuntare.tradeautomat.network.SetScrollOffsetPayload;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
-public class AutomatTradeSetupScreen extends AbstractContainerScreen<AutomatTradeSetupMenu> {
+import java.util.ArrayList;
+import java.util.List;
+
+public class AutomatTradeScreen extends AbstractContainerScreen<AutomatTradeMenu> {
     private static final int MAIN_PANEL_WIDTH = 176;
     private final ScrollController scrollController = new ScrollController();
+    private final List<Button> tradeButtons = new ArrayList<>();
 
-    public AutomatTradeSetupScreen(AutomatTradeSetupMenu menu, Inventory inventory, Component title) {
+    public AutomatTradeScreen(AutomatTradeMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
     }
 
@@ -32,6 +38,27 @@ public class AutomatTradeSetupScreen extends AbstractContainerScreen<AutomatTrad
 
         this.inventoryLabelY = playerInvY - 11;
         this.titleLabelY = 6;
+
+        int x = this.leftPos;
+        int y = this.topPos;
+
+        this.tradeButtons.clear();
+
+        for (int i = 0; i < visibleRows; i++) {
+            final int rowIndex = i;
+
+            Button btn = Button.builder(Component.literal("Trade"), button -> {
+                        int rawTradeIndex = this.menu.getActualTradeIndex(rowIndex);
+                        if (rawTradeIndex != -1 && this.menu.getBlockEntity() != null) {
+                            ClientPlayNetworking.send(new ExecuteTradePayload(this.menu.getBlockEntity().getBlockPos(), rawTradeIndex));
+                        }
+                    })
+                    .bounds(x + 96, y + 18 + i * 22, 38, 16)
+                    .build();
+
+            this.tradeButtons.add(btn);
+            this.addRenderableWidget(btn);
+        }
     }
 
     @Override
@@ -43,25 +70,27 @@ public class AutomatTradeSetupScreen extends AbstractContainerScreen<AutomatTrad
         int panelHeight = this.menu.getDynamicPanelHeight();
 
         GuiRenderUtils.drawMenu(graphics, x, y, MAIN_PANEL_WIDTH, panelHeight);
-
         GuiRenderUtils.drawMenuSlots(graphics, x, y, this.menu);
 
         if (this.menu.getBlockEntity() == null) return;
 
-        int unlockedTrades = this.menu.getBlockEntity().getUnlockedTradeOffers();
+        int validTrades = this.menu.getValidTradesCount();
         int visibleRows = this.menu.getVisibleRowsCount();
 
-        int arrowX = x + 53;
         for (int i = 0; i < visibleRows; i++) {
-            int tradeIndex = this.menu.getScrollOffset() + i;
-            if (tradeIndex >= unlockedTrades) break;
+            int rawTradeIndex = this.menu.getActualTradeIndex(i);
+            if (rawTradeIndex == -1) break;
 
-            int arrowY = y + 19 + (i * 22);
-            GuiRenderUtils.drawArrow(graphics, arrowX, arrowY);
+            int rowY = y + 18 + i * 22;
+            GuiRenderUtils.drawArrow(graphics, x + 54, rowY + 2);
+
+            if (i < this.tradeButtons.size()) {
+                this.tradeButtons.get(i).active = this.menu.isTradeExecutableByRawIndex(rawTradeIndex,this.minecraft.player);
+            }
         }
 
-        if (unlockedTrades > AutomatTradeSetupMenu.VISIBLE_ROWS) {
-            renderScrollbar(graphics, x + 156, y + 18, unlockedTrades);
+        if (validTrades > AutomatTradeMenu.VISIBLE_ROWS) {
+            renderScrollbar(graphics, x + 156, y + 18, validTrades);
         }
     }
 
@@ -69,7 +98,7 @@ public class AutomatTradeSetupScreen extends AbstractContainerScreen<AutomatTrad
         graphics.fill(x, y, x + 10, y + 86, 0xFF202020);
 
         int scrollbarHeight = 86;
-        int thumbHeight = Math.max(12, (int) ((float) AutomatTradeSetupMenu.VISIBLE_ROWS / totalTrades * scrollbarHeight));
+        int thumbHeight = Math.max(12, (int) ((float) AutomatTradeMenu.VISIBLE_ROWS / totalTrades * scrollbarHeight));
         int thumbY = y + (int) (scrollController.getScrollAmount() * (scrollbarHeight - thumbHeight));
 
         graphics.fill(x, thumbY, x + 10, thumbY + thumbHeight, 0xFF8B8B8B);
@@ -86,10 +115,10 @@ public class AutomatTradeSetupScreen extends AbstractContainerScreen<AutomatTrad
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
         if (this.menu.getBlockEntity() == null) return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
 
-        int totalTrades = this.menu.getBlockEntity().getUnlockedTradeOffers();
-        if (totalTrades > AutomatTradeSetupMenu.VISIBLE_ROWS) {
-            scrollController.onMouseScrolled(verticalAmount, totalTrades, AutomatTradeSetupMenu.VISIBLE_ROWS);
-            int newOffset = scrollController.getRowOffset(totalTrades, AutomatTradeSetupMenu.VISIBLE_ROWS);
+        int totalTrades = this.menu.getValidTradesCount();
+        if (totalTrades > AutomatTradeMenu.VISIBLE_ROWS) {
+            scrollController.onMouseScrolled(verticalAmount, totalTrades, AutomatTradeMenu.VISIBLE_ROWS);
+            int newOffset = scrollController.getRowOffset(totalTrades, AutomatTradeMenu.VISIBLE_ROWS);
             updateScrollOffset(newOffset);
             return true;
         }
@@ -100,10 +129,10 @@ public class AutomatTradeSetupScreen extends AbstractContainerScreen<AutomatTrad
     public boolean mouseDragged(MouseButtonEvent event, double dragX, double dragY) {
         if (this.menu.getBlockEntity() == null) return super.mouseDragged(event, dragX, dragY);
 
-        int totalTrades = this.menu.getBlockEntity().getUnlockedTradeOffers();
-        if (scrollController.isDragging() && totalTrades > AutomatTradeSetupMenu.VISIBLE_ROWS) {
+        int totalTrades = this.menu.getValidTradesCount();
+        if (scrollController.isDragging() && totalTrades > AutomatTradeMenu.VISIBLE_ROWS) {
             scrollController.onMouseDragged(event.y(), this.topPos + 18, 86);
-            int newOffset = scrollController.getRowOffset(totalTrades, AutomatTradeSetupMenu.VISIBLE_ROWS);
+            int newOffset = scrollController.getRowOffset(totalTrades, AutomatTradeMenu.VISIBLE_ROWS);
             updateScrollOffset(newOffset);
             return true;
         }
@@ -115,11 +144,10 @@ public class AutomatTradeSetupScreen extends AbstractContainerScreen<AutomatTrad
         boolean button = event.button() == 0;
         int x = this.leftPos + 156;
         int y = this.topPos + 18;
-        double mouseX = event.x();
-        double mouseY = event.y();
 
-        if (this.menu.getBlockEntity() != null && this.menu.getBlockEntity().getUnlockedTradeOffers() > AutomatTradeSetupMenu.VISIBLE_ROWS) {
-            if (button && scrollController.onMouseClicked(mouseX, mouseY, x, y, 10, 86)) {
+        int validTrades = this.menu.getValidTradesCount();
+        if (validTrades > AutomatTradeMenu.VISIBLE_ROWS) {
+            if (button && scrollController.onMouseClicked(event.x(), event.y(), x, y, 10, 86)) {
                 return true;
             }
         }
@@ -137,9 +165,6 @@ public class AutomatTradeSetupScreen extends AbstractContainerScreen<AutomatTrad
     @Override
     protected boolean hasClickedOutside(double mouseX, double mouseY, int guiLeft, int guiTop) {
         int panelHeight = this.menu.getDynamicPanelHeight();
-        boolean insideMain = mouseX >= guiLeft && mouseX < guiLeft + MAIN_PANEL_WIDTH
-                && mouseY >= guiTop && mouseY < guiTop + panelHeight;
-
-        return !insideMain;
+        return mouseX < guiLeft || mouseX >= guiLeft + MAIN_PANEL_WIDTH || mouseY < guiTop || mouseY >= guiTop + panelHeight;
     }
 }

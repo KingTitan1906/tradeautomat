@@ -12,7 +12,9 @@ import java.util.List;
 
 public class TradeOffer {
 
+    public static final int MIN_INPUTS = 2;
     public static final int MAX_INPUTS = 9;
+    public static final int MIN_OUTPUTS = 1;
     public static final int MAX_OUTPUTS = 6;
 
     public static final Codec<TradeOffer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -40,6 +42,17 @@ public class TradeOffer {
         this.inputs = new ArrayList<>(inputs.stream().map(ItemStack::copy).toList());
         this.outputs = new ArrayList<>(outputs.stream().map(ItemStack::copy).toList());
         this.active = active;
+
+        ensureCapacity();
+    }
+
+    private void ensureCapacity() {
+        while (this.inputs.size() < 2) {
+            this.inputs.add(ItemStack.EMPTY);
+        }
+        while (this.outputs.size() < 1) {
+            this.outputs.add(ItemStack.EMPTY);
+        }
     }
 
     public ItemStack getInput(int index) {
@@ -75,5 +88,24 @@ public class TradeOffer {
 
     public TradeOffer copy() {
         return new TradeOffer(this.inputs, this.outputs, this.active);
+    }
+
+    @Override
+    public String toString() {
+        if (!isValid()) {
+            return "TradeOffer{EMPTY}";
+        }
+
+        List<String> in = inputs.stream()
+                .filter(s -> !s.isEmpty())
+                .map(s -> s.getCount() + "x " + s.getItem().getDescriptionId())
+                .toList();
+
+        List<String> out = outputs.stream()
+                .filter(s -> !s.isEmpty())
+                .map(s -> s.getCount() + "x " + s.getItem().getDescriptionId())
+                .toList();
+
+        return String.format("TradeOffer{in=%s -> out=%s, active=%b}", in, out, active);
     }
 }

@@ -1,6 +1,5 @@
 package me.wuntare.tradeautomat.gui;
 
-
 import me.wuntare.tradeautomat.block.entity.TradeAutomatEntity;
 import me.wuntare.tradeautomat.gui.util.GhostSlot;
 import me.wuntare.tradeautomat.registry.ModMenuTypes;
@@ -11,7 +10,7 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.*;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
@@ -27,14 +26,21 @@ public class AutomatTradeSetupMenu extends AbstractContainerMenu {
         super(ModMenuTypes.AUTOMAT_TRADE_SETUP_MENU, containerId);
         this.blockEntity = blockEntity;
 
-        for (int row = 0; row < VISIBLE_ROWS; row++) {
-            int y = 18 + row * 20;
+        if (this.blockEntity != null) {
+            this.blockEntity.recalculateModules();
+        }
+
+        int visibleRows = getVisibleRowsCount();
+
+        for (int row = 0; row < visibleRows; row++) {
+            int y = 18 + row * 22;
             this.addSlot(new TradeSetupGhostSlot(row, 0, 14, y));
             this.addSlot(new TradeSetupGhostSlot(row, 1, 32, y));
             this.addSlot(new TradeSetupGhostSlot(row, 2, 74, y));
         }
 
-        int playerInvY = 114;
+        int playerInvY = 18 + visibleRows * 22 + 10;
+
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 9; ++col) {
                 this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, playerInvY + row * 18));
@@ -44,16 +50,29 @@ public class AutomatTradeSetupMenu extends AbstractContainerMenu {
             this.addSlot(new Slot(playerInventory, col, 8 + col * 18, playerInvY + 58));
         }
     }
+
     public AutomatTradeSetupMenu(int containerId, Inventory playerInventory, BlockPos pos) {
         this(containerId, playerInventory, (TradeAutomatEntity) playerInventory.player.level().getBlockEntity(pos));
     }
 
+    public int getVisibleRowsCount() {
+        if (blockEntity == null) return 1;
+        int unlocked = blockEntity.getUnlockedTradeOffers();
+        return Math.max(1, Math.min(VISIBLE_ROWS, unlocked));
+    }
+
+    public int getDynamicPanelHeight() {
+        return 18 + getVisibleRowsCount() * 22 + 10 + 86;
+    }
+
     @Override
     public void clicked(int slotId, int button, ContainerInput clickType, Player player) {
-        if (slotId >= 0 && slotId < 12) {
+        if (slotId >= 0 && slotId < this.slots.size()) {
             Slot slot = this.slots.get(slotId);
             if (slot instanceof TradeSetupGhostSlot ghostSlot) {
-                GhostSlot.handleGhostClick(ghostSlot, getCarried(), button);
+                if (!ghostSlot.isLocked()) {
+                    GhostSlot.handleGhostClick(ghostSlot, getCarried(), button);
+                }
                 return;
             }
         }
@@ -61,7 +80,8 @@ public class AutomatTradeSetupMenu extends AbstractContainerMenu {
     }
 
     public void setScrollOffset(int scrollOffset) {
-        this.scrollOffset = Math.max(0, scrollOffset);
+        int maxOffset = blockEntity != null ? Math.max(0, blockEntity.getUnlockedTradeOffers() - VISIBLE_ROWS) : 0;
+        this.scrollOffset = Math.min(Math.max(0, scrollOffset), maxOffset);
     }
 
     public int getScrollOffset() {
@@ -97,7 +117,13 @@ public class AutomatTradeSetupMenu extends AbstractContainerMenu {
         }
 
         public boolean isLocked() {
+            if (blockEntity == null) return true;
             return getActualTradeIndex() >= blockEntity.getUnlockedTradeOffers();
+        }
+
+        @Override
+        public boolean isActive() {
+            return !isLocked();
         }
 
         @Override
@@ -111,9 +137,11 @@ public class AutomatTradeSetupMenu extends AbstractContainerMenu {
 
             int index = getActualTradeIndex();
             List<TradeOffer> trades = blockEntity.getTrades();
-            if (index >= trades.size()) return ItemStack.EMPTY;
+            if (trades == null || index >= trades.size()) return ItemStack.EMPTY;
 
             TradeOffer offer = trades.get(index);
+            if (offer == null) return ItemStack.EMPTY;
+
             return (slotType == 0) ? offer.getInput(0) : (slotType == 1) ? offer.getInput(1) : offer.getOutput(0);
         }
 
@@ -123,6 +151,7 @@ public class AutomatTradeSetupMenu extends AbstractContainerMenu {
 
             int index = getActualTradeIndex();
             List<TradeOffer> trades = blockEntity.getTrades();
+            if (trades == null) return;
 
             while (trades.size() <= index) {
                 trades.add(new TradeOffer());
@@ -134,6 +163,15 @@ public class AutomatTradeSetupMenu extends AbstractContainerMenu {
             else if (slotType == 2) offer.setOutput(0, stack);
 
             blockEntity.setChanged();
+
+            if (blockEntity.getLevel() != null && !blockEntity.getLevel().isClientSide()) {
+                blockEntity.getLevel().sendBlockUpdated(
+                        blockEntity.getBlockPos(),
+                        blockEntity.getBlockState(),
+                        blockEntity.getBlockState(),
+                        3
+                );
+            }
         }
     }
 }

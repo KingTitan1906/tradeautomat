@@ -1,5 +1,6 @@
 package me.wuntare.tradeautomat.client;
 
+import me.wuntare.tradeautomat.gui.AutomatTradeMenu;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.resources.Identifier;
@@ -59,7 +60,12 @@ public final class GuiRenderUtils {
 
             drawSlot(graphics, slotX, slotY);
 
-            boolean isLocked = !slot.mayPlace(ItemStack.EMPTY);
+            boolean isLocked = false;
+            if (slot instanceof AutomatTradeMenu.TradeDisplaySlot tradeSlot) {
+                isLocked = !tradeSlot.isActiveSlot();
+            } else if (slot instanceof Slot) {
+                isLocked = !slot.mayPlace(ItemStack.EMPTY);
+            }
 
             if (isLocked) {
                 graphics.fill(slotX, slotY, slotX + 16, slotY + 16, 0x80000000);

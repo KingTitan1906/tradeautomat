@@ -1,5 +1,6 @@
 package me.wuntare.tradeautomat.network;
 
+import me.wuntare.tradeautomat.Main;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -10,7 +11,7 @@ import net.minecraft.resources.Identifier;
 public record SetCodePayload(BlockPos pos, String code) implements CustomPacketPayload {
 
     public static final Type<SetCodePayload> TYPE =
-            new Type<>(Identifier.fromNamespaceAndPath("tradeautomat", "set_code"));
+            new Type<>(Identifier.fromNamespaceAndPath(Main.MOD_ID, "set_code"));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SetCodePayload> CODEC =
             StreamCodec.composite(

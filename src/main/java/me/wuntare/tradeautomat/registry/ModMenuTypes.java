@@ -2,6 +2,7 @@ package me.wuntare.tradeautomat.registry;
 
 import me.wuntare.tradeautomat.Main;
 import me.wuntare.tradeautomat.gui.AutomatStorageMenu;
+import me.wuntare.tradeautomat.gui.AutomatTradeMenu;
 import me.wuntare.tradeautomat.gui.AutomatTradeSetupMenu;
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuType;
 import net.minecraft.core.BlockPos;
@@ -20,6 +21,11 @@ public final class ModMenuTypes {
             BuiltInRegistries.MENU,
             Identifier.fromNamespaceAndPath(Main.MOD_ID, "automat_trade_setup_menu"),
             new ExtendedMenuType<>(AutomatTradeSetupMenu::new, BlockPos.STREAM_CODEC)
+    );
+    public static final MenuType<AutomatTradeMenu> AUTOMAT_TRADE_MENU = Registry.register(
+            BuiltInRegistries.MENU,
+            Identifier.fromNamespaceAndPath(Main.MOD_ID, "automat_trade_menu"),
+            new ExtendedMenuType<>(AutomatTradeMenu::new, BlockPos.STREAM_CODEC)
     );
 
     private ModMenuTypes() {
