@@ -24,12 +24,12 @@
 ## ⚙️ Requirements & Installation
 
 ### Requirements
-* **Minecraft**: `1.21+`
-* **Java**: `21`
+* **Minecraft**: `26.2`
+* **Java**: `26`
 * **JEI (Just Enough Items)** *(optional, for viewing recipes)*
 
 ### Installation
-1. Download the latest version from [Releases](../../releases) (or CurseForge / Modrinth).
+1. Download the latest version from [Releases](../../releases) (or Modrinth).
 2. Place the `.jar` file into your `mods` folder.
 3. Launch the game!
 
