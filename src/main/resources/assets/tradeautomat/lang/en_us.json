@@ -1,17 +1,30 @@
 {
+  "block.tradeautomat.trade_automat": "Trade automat",
+  "block.tradeautomat.trade_automat.storage": "Automat Storage",
+  "block.tradeautomat.engineering_terminal": "Engineering Terminal",
+
   "item.tradeautomat.module_storage": "Module Storage",
   "item.tradeautomat.module_trade": "Module Trade",
   "item.tradeautomat.module_offer": "Module Offer",
-  "item.tradeautomat.keycard": "Keycard",
+  "item.tradeautomat.punch_card": "Punch Card",
 
   "item.tradeautomat.module_storage.tooltip": "Module level: %s",
   "item.tradeautomat.module_trade.tooltip": "Module level: %s",
   "item.tradeautomat.module_offer.tooltip": "Module level: %s",
-  "item.tradeautomat.keycard.tooltip": "Code: %s",
+  "item.tradeautomat.punch_card.tooltip": "Code: %s",
 
   "tradeautomat.setup_password": "Setup Password",
   "tradeautomat.enter_code": "Enter Code",
   "tradeautomat.edit_code": "Edit Code",
   "tradeautomat.submit": "Submit",
-  "tradeautomat.inventory": "Inventory"
+  "tradeautomat.inventory": "Inventory",
+  "tradeautomat.tab": "Trade Automat Tab",
+
+  "message.tradeautomat.no_trades": "There are no available offers for this Trade automat.",
+
+  "tradeautomat.recipe.code_display": "Code: %s - %s",
+  "tradeautomat.recipe.code_not_needed": "Code not required",
+  "tradeautomat.recipe.code_needed": "An 8-digit code is required for this recipe",
+  "tradeautomat.recipe.code_range": "Range: §e%s§7 - §e%s",
+  "tradeautomat.recipe.work_without_code": "This recipe works without entering a code"
 }

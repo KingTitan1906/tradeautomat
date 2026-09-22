@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "top": "tradeautomat:block/engineering_terminal_top",
+    "bottom": "tradeautomat:block/engineering_terminal_bottom",
+    "front": "tradeautomat:block/engineering_terminal_front",
+    "side": "tradeautomat:block/engineering_terminal_side"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "type": "tradeautomat:engineering",
+  "base": {
+    "item": "tradeautomat:module_storage",
+    "components": {
+      "tradeautomat:module_level": 3
+    }
+  },
+  "material_first": {
+    "item": "minecraft:diamond"
+  },
+  "material_second": {
+    "item": "tradeautomat:module_storage",
+    "components": {
+      "tradeautomat:module_level": 3
+    }
+  },
+  "result": {
+    "id": "tradeautomat:module_storage",
+    "count": 1,
+    "components": {
+      "tradeautomat:module_level": 4
+    }
+  }
+}

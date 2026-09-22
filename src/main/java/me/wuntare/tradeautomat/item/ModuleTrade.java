@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 
 public class ModuleTrade extends Item {
     public ModuleTrade(Properties props) {
-        props.stacksTo(1);
+        props.stacksTo(64);
         props.component(ModDataComponents.MODULE_LEVEL, 1);
         super(props);
     }

@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "tradeautomat:block/engineering_terminal" },
+    "facing=south": { "model": "tradeautomat:block/engineering_terminal", "y": 180 },
+    "facing=west":  { "model": "tradeautomat:block/engineering_terminal", "y": 270 },
+    "facing=east":  { "model": "tradeautomat:block/engineering_terminal", "y": 90 }
+  }
+}

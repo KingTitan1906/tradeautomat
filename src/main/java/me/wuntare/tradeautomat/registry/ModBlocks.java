@@ -3,6 +3,7 @@ package me.wuntare.tradeautomat.registry;
 import java.util.function.Function;
 
 import me.wuntare.tradeautomat.Main;
+import me.wuntare.tradeautomat.block.EngineeringTerminalBlock;
 import me.wuntare.tradeautomat.block.TradeAutomat;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -27,7 +28,8 @@ public class ModBlocks {
 		return block;
 	}
 
-    public static final Block TRADE_AUTOMAT = register("trade_automat", TradeAutomat::new, BlockBehaviour.Properties.of().sound(SoundType.METAL));
+    public static final Block TRADE_AUTOMAT = register("trade_automat", TradeAutomat::new, BlockBehaviour.Properties.of().sound(SoundType.COPPER));
+    public static final Block ENGINEERING_TERMINAL = register("engineering_terminal", EngineeringTerminalBlock::new, BlockBehaviour.Properties.of().sound(SoundType.WOOD));
 
     public static void initialize() {}
 }

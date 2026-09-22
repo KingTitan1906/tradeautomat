@@ -2,6 +2,7 @@ package me.wuntare.tradeautomat.model;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -17,6 +18,10 @@ public class TradeOffer {
     public static final int MIN_OUTPUTS = 1;
     public static final int MAX_OUTPUTS = 6;
 
+    private final NonNullList<ItemStack> inputs;
+    private final NonNullList<ItemStack> outputs;
+    private boolean active;
+
     public static final Codec<TradeOffer> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             ItemStack.OPTIONAL_CODEC.listOf().fieldOf("inputs").forGetter(TradeOffer::getInputs),
             ItemStack.OPTIONAL_CODEC.listOf().fieldOf("outputs").forGetter(TradeOffer::getOutputs),
@@ -30,17 +35,16 @@ public class TradeOffer {
             TradeOffer::new
     );
 
-    private final List<ItemStack> inputs;
-    private final List<ItemStack> outputs;
-    private boolean active;
-
     public TradeOffer() {
         this(new ArrayList<>(), new ArrayList<>(), true);
     }
 
     public TradeOffer(List<ItemStack> inputs, List<ItemStack> outputs, boolean active) {
-        this.inputs = new ArrayList<>(inputs.stream().map(ItemStack::copy).toList());
-        this.outputs = new ArrayList<>(outputs.stream().map(ItemStack::copy).toList());
+        this.inputs = NonNullList.create();
+        this.inputs.addAll(inputs);
+        this.outputs = NonNullList.create();
+        this.outputs.addAll(outputs);
+
         this.active = active;
 
         ensureCapacity();

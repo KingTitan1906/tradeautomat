@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "II ",
+    "BB ",
+    "BB "
+  ],
+  "key": {
+    "I": "minecraft:iron_ingot",
+    "B": "minecraft:oxidized_cut_copper"
+  },
+  "result": {
+    "id": "tradeautomat:engineering_terminal",
+    "count": 1
+  }
+}

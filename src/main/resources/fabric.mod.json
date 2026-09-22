@@ -19,14 +19,12 @@
 		],
         "fabric-datagen": [
           "me.wuntare.tradeautomat.client.ModDataGenerator"
+        ],
+        "jei_mod_plugin": [
+          "me.wuntare.tradeautomat.compat.jei.JeiPlugin"
         ]
 	},
-	"mixins": [
-		{
-			"config": "tradeautomat.client.mixins.json",
-			"environment": "client"
-		}
-	],
+	"mixins": [],
 	"depends": {
 		"fabricloader": ">=0.19.5",
 		"minecraft": "~26.2",

@@ -1,0 +1,25 @@
+{
+  "type": "tradeautomat:engineering",
+  "base": {
+    "item": "tradeautomat:module_trade",
+    "components": {
+      "tradeautomat:module_level": 4
+    }
+  },
+  "material_first": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "material_second": {
+    "item": "tradeautomat:module_trade",
+    "components": {
+      "tradeautomat:module_level": 4
+    }
+  },
+  "result": {
+    "id": "tradeautomat:module_trade",
+    "count": 1,
+    "components": {
+      "tradeautomat:module_level": 5
+    }
+  }
+}

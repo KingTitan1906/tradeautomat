@@ -3,8 +3,8 @@ package me.wuntare.tradeautomat.network;
 import me.wuntare.tradeautomat.block.entity.TradeAutomatEntity;
 import me.wuntare.tradeautomat.gui.AutomatTradeMenu;
 import me.wuntare.tradeautomat.gui.AutomatTradeSetupMenu;
+import me.wuntare.tradeautomat.gui.EngineeringTerminalMenu;
 import me.wuntare.tradeautomat.model.TradeOffer;
-import me.wuntare.tradeautomat.util.TradeUtils;
 import net.fabricmc.fabric.api.menu.v1.ExtendedMenuProvider;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -26,11 +26,27 @@ public class ModNetworking {
         PayloadTypeRegistry.serverboundPlay().register(ExecuteTradePayload.TYPE, ExecuteTradePayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(SaveTradeSetupPayload.TYPE, SaveTradeSetupPayload.CODEC);
         PayloadTypeRegistry.serverboundPlay().register(SetScrollOffsetPayload.TYPE, SetScrollOffsetPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(SetTerminalCodePayload.TYPE, SetTerminalCodePayload.CODEC);
 
         registerServerReceivers();
     }
 
     private static void registerServerReceivers() {
+        ServerPlayNetworking.registerGlobalReceiver(SetTerminalCodePayload.TYPE, (payload, context) -> {
+            context.server().execute(() -> {
+                ServerPlayer player = context.player();
+                BlockPos pos = payload.pos();
+
+                if (player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) > 64.0) return;
+
+                if (player.containerMenu instanceof EngineeringTerminalMenu menu) {
+                    if (menu.getBlockEntity() != null && menu.getBlockEntity().getBlockPos().equals(pos)) {
+                        menu.updateCodeFromClient(payload.code());
+                    }
+                }
+            });
+        });
+
         ServerPlayNetworking.registerGlobalReceiver(SetCodePayload.TYPE, (payload, context) -> {
             context.server().execute(() -> {
                 ServerPlayer player = context.player();
@@ -98,18 +114,11 @@ public class ModNetworking {
 
                 te.recalculateModules();
 
-                int index = payload.tradeIndex();
-                if (index < 0 || index >= te.getUnlockedTradeOffers() || index >= te.getTrades().size()) return;
+                int rawIndex = payload.tradeIndex();
 
-                TradeOffer offer = te.getTrades().get(index);
-                if (offer == null || !offer.isValid() || !offer.isActive()) return;
+                if (!menu.isTradeExecutableByRawIndex(rawIndex, player)) return;
 
-                ItemStack reward = offer.getOutput(0).copy();
-                if (reward.isEmpty() || !te.hasProductInStock(reward)) return;
-
-                if (!TradeUtils.hasEnoughItemsForOffer(player, offer)) return;
-
-                if (!te.canAcceptTradeInputs(offer)) return;
+                TradeOffer offer = te.getTrades().get(rawIndex);
 
                 for (ItemStack input : offer.getInputs()) {
                     if (!input.isEmpty()) {
@@ -123,9 +132,15 @@ public class ModNetworking {
                     }
                 }
 
-                te.extractProduct(reward);
-                if (!player.getInventory().add(reward.copy())) {
-                    player.drop(reward.copy(), false);
+                for (ItemStack output : offer.getOutputs()) {
+                    if (!output.isEmpty()) {
+                        ItemStack reward = output.copy();
+                        te.extractProduct(reward);
+
+                        if (!player.getInventory().add(reward)) {
+                            player.drop(reward, false);
+                        }
+                    }
                 }
 
                 te.setChanged();
@@ -152,6 +167,7 @@ public class ModNetworking {
                 }
 
                 te.setTrades(payload.trades());
+                te.setChanged();
             });
         });
     }

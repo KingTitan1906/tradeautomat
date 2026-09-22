@@ -1,0 +1,16 @@
+{
+  "type": "tradeautomat:engineering",
+  "base": {
+    "item": "minecraft:copper_ingot"
+  },
+  "material_first": {
+    "item": "minecraft:copper_nugget"
+  },
+  "requires_code": true,
+  "min_code": 0,
+  "max_code": 99999999,
+  "result": {
+    "id": "tradeautomat:punch_card",
+    "count": 1
+  }
+}

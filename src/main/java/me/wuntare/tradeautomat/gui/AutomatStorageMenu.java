@@ -53,7 +53,7 @@ public class AutomatStorageMenu extends AbstractContainerMenu {
 
         Container module = this.blockEntity.getModuleContainer();
         this.moduleStart = this.slots.size();
-        addStorage(module, 9, 2, 8, 34, false);
+        addModuleStorage(module, 9, 2, 8, 34);
         this.moduleEnd = this.slots.size();
     }
 
@@ -142,6 +142,22 @@ public class AutomatStorageMenu extends AbstractContainerMenu {
                         else {
                             return slotIndex < unlockedSlots.get();
                         }
+                    }
+                });
+            }
+        }
+    }
+    private void addModuleStorage(Container container, int columns, int rows, int xOffset, int yOffset) {
+        int index = 0;
+        int containerSize = container.getContainerSize();
+        for (int row = 0; row < rows; row++) {
+            for (int column = 0; column < columns; column++) {
+                if (index >= containerSize) return;
+                final int slotIndex = index++;
+                this.addSlot(new Slot(container, slotIndex, xOffset + column * 18, yOffset + row * 18) {
+                    @Override
+                    public boolean mayPlace(ItemStack stack) {
+                        return container.canPlaceItem(slotIndex, stack);
                     }
                 });
             }

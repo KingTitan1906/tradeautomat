@@ -1,0 +1,19 @@
+{
+  "type": "tradeautomat:engineering",
+  "base": {
+    "item": "minecraft:copper_ingot"
+  },
+  "material_first": {
+    "item": "minecraft:redstone"
+  },
+  "material_second": {
+    "item": "minecraft:bundle"
+  },
+  "result": {
+    "id": "tradeautomat:module_trade",
+    "count": 1,
+    "components": {
+      "tradeautomat:module_level": 1
+    }
+  }
+}

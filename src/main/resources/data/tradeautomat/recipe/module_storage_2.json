@@ -1,0 +1,25 @@
+{
+  "type": "tradeautomat:engineering",
+  "base": {
+    "item": "tradeautomat:module_storage",
+    "components": {
+      "tradeautomat:module_level": 1
+    }
+  },
+  "material_first": {
+    "item": "minecraft:iron_ingot"
+  },
+  "material_second": {
+    "item": "tradeautomat:module_storage",
+    "components": {
+      "tradeautomat:module_level": 1
+    }
+  },
+  "result": {
+    "id": "tradeautomat:module_storage",
+    "count": 1,
+    "components": {
+      "tradeautomat:module_level": 2
+    }
+  }
+}

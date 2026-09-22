@@ -19,8 +19,10 @@ public class Main implements ModInitializer {
 		ModItems.initialize();
 		ModBlocks.initialize();
 		ModBlockEntities.initialize();
+        ModCreativeTabs.initialize();
 		ModMenuTypes.initialize();
         ModNetworking.registerPackets();
+        ModRecipes.initialize();
 
 		LOGGER.info("TradeAutomat initialized");
 	}

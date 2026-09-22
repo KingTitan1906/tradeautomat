@@ -1,6 +1,7 @@
 package me.wuntare.tradeautomat.registry;
 
 import me.wuntare.tradeautomat.Main;
+import me.wuntare.tradeautomat.block.entity.EngineeringTerminalBlockEntity;
 import me.wuntare.tradeautomat.block.entity.TradeAutomatEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.core.Registry;
@@ -17,6 +18,7 @@ public class ModBlockEntities {
     }
 
     public static final BlockEntityType<TradeAutomatEntity> TRADE_AUTOMAT_ENTITY = register("trade_automat_entity", TradeAutomatEntity::new, ModBlocks.TRADE_AUTOMAT);
+    public static final BlockEntityType<EngineeringTerminalBlockEntity> ENGINEERING_TERMINAL_ENTITY = register("engineering_terminal_entity", EngineeringTerminalBlockEntity::new, ModBlocks.ENGINEERING_TERMINAL);
 
     public static void initialize() {}
 }

@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "RRR",
+    "BCB",
+    "BBB"
+  ],
+  "key": {
+    "C": "minecraft:chest",
+    "R": "minecraft:redstone",
+    "B": "minecraft:copper_block"
+  },
+  "result": {
+    "id": "tradeautomat:trade_automat",
+    "count": 1
+  }
+}

@@ -1,7 +1,31 @@
 {
   "variants": {
-    "": {
-      "model": "tradeautomat:block/trade_automat"
-    }
+    "facing=north,offset_x=0,offset_y=0": { "model": "tradeautomat:block/empty" },
+    "facing=north,offset_x=1,offset_y=0": { "model": "tradeautomat:block/trade_automat", "y": 0 },
+    "facing=north,offset_x=2,offset_y=0": { "model": "tradeautomat:block/empty" },
+    "facing=north,offset_x=0,offset_y=1": { "model": "tradeautomat:block/empty" },
+    "facing=north,offset_x=1,offset_y=1": { "model": "tradeautomat:block/empty" },
+    "facing=north,offset_x=2,offset_y=1": { "model": "tradeautomat:block/empty" },
+
+    "facing=east,offset_x=0,offset_y=0":  { "model": "tradeautomat:block/empty" },
+    "facing=east,offset_x=1,offset_y=0":  { "model": "tradeautomat:block/trade_automat", "y": 90 },
+    "facing=east,offset_x=2,offset_y=0":  { "model": "tradeautomat:block/empty" },
+    "facing=east,offset_x=0,offset_y=1":  { "model": "tradeautomat:block/empty" },
+    "facing=east,offset_x=1,offset_y=1":  { "model": "tradeautomat:block/empty" },
+    "facing=east,offset_x=2,offset_y=1":  { "model": "tradeautomat:block/empty" },
+
+    "facing=south,offset_x=0,offset_y=0": { "model": "tradeautomat:block/empty" },
+    "facing=south,offset_x=1,offset_y=0": { "model": "tradeautomat:block/trade_automat", "y": 180 },
+    "facing=south,offset_x=2,offset_y=0": { "model": "tradeautomat:block/empty" },
+    "facing=south,offset_x=0,offset_y=1": { "model": "tradeautomat:block/empty" },
+    "facing=south,offset_x=1,offset_y=1": { "model": "tradeautomat:block/empty" },
+    "facing=south,offset_x=2,offset_y=1": { "model": "tradeautomat:block/empty" },
+
+    "facing=west,offset_x=0,offset_y=0":  { "model": "tradeautomat:block/empty" },
+    "facing=west,offset_x=1,offset_y=0":  { "model": "tradeautomat:block/trade_automat", "y": 270 },
+    "facing=west,offset_x=2,offset_y=0":  { "model": "tradeautomat:block/empty" },
+    "facing=west,offset_x=0,offset_y=1":  { "model": "tradeautomat:block/empty" },
+    "facing=west,offset_x=1,offset_y=1":  { "model": "tradeautomat:block/empty" },
+    "facing=west,offset_x=2,offset_y=1":  { "model": "tradeautomat:block/empty" }
   }
 }
