@@ -262,7 +262,7 @@ public class TradeAutomatEntity extends BlockEntity implements ExtendedMenuProvi
                     slot.grow(transfer);
                     stackToAdd.shrink(transfer);
                     if (stackToAdd.isEmpty()) {
-                        this.setChanged();
+                        syncToClient();
                         return true;
                     }
                 }
@@ -273,12 +273,12 @@ public class TradeAutomatEntity extends BlockEntity implements ExtendedMenuProvi
             if (this.invInput.getItem(i).isEmpty()) {
                 this.invInput.setItem(i, stackToAdd.copy());
                 stackToAdd.setCount(0);
-                this.setChanged();
+                syncToClient();
                 return true;
             }
         }
 
-        this.setChanged();
+        syncToClient();
         return stackToAdd.isEmpty();
     }
 
@@ -293,7 +293,7 @@ public class TradeAutomatEntity extends BlockEntity implements ExtendedMenuProvi
                 if (toRemove <= 0) break;
             }
         }
-        this.setChanged();
+        syncToClient();
     }
 
     public SimpleContainer getInputContainer() { return invInput; }
@@ -369,6 +369,13 @@ public class TradeAutomatEntity extends BlockEntity implements ExtendedMenuProvi
         CompoundTag tag = this.saveCustomOnly(registries);
         if (!tag.isEmpty()) {
             stack.set(DataComponents.BLOCK_ENTITY_DATA, TypedEntityData.of(this.getType(), tag));
+        }
+    }
+
+    public void syncToClient() {
+        if (this.level != null && !this.level.isClientSide()) {
+            this.setChanged();
+            this.level.sendBlockUpdated(this.worldPosition, getBlockState(), getBlockState(), 3);
         }
     }
 

@@ -122,13 +122,33 @@ public class ModNetworking {
 
                 for (ItemStack input : offer.getInputs()) {
                     if (!input.isEmpty()) {
-                        player.getInventory().clearOrCountMatchingItems(
+                        int countInInventory = player.getInventory().clearOrCountMatchingItems(
+                                stack -> ItemStack.isSameItemSameComponents(stack, input),
+                                0,
+                                player.inventoryMenu.getCraftSlots()
+                        );
+
+                        if (countInInventory < input.getCount()) {
+                            menu.broadcastChanges();
+                            player.containerMenu.sendAllDataToRemote();
+                            return;
+                        }
+                    }
+                }
+
+                for (ItemStack input : offer.getInputs()) {
+                    if (!input.isEmpty()) {
+                        int removed = player.getInventory().clearOrCountMatchingItems(
                                 stack -> ItemStack.isSameItemSameComponents(stack, input),
                                 input.getCount(),
                                 player.inventoryMenu.getCraftSlots()
                         );
 
-                        te.depositPayment(input.copy());
+                        if (removed > 0) {
+                            ItemStack payment = input.copy();
+                            payment.setCount(removed);
+                            te.depositPayment(payment);
+                        }
                     }
                 }
 
@@ -143,8 +163,9 @@ public class ModNetworking {
                     }
                 }
 
-                te.setChanged();
+                te.syncToClient();
                 menu.broadcastChanges();
+                player.containerMenu.sendAllDataToRemote();
             });
         });
 

@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 
 public class ModuleOffer extends Item {
     public ModuleOffer(Properties props) {
-        props.stacksTo(64);
+        props.stacksTo(1);
         props.component(ModDataComponents.MODULE_LEVEL, 1);
         super(props);
     }

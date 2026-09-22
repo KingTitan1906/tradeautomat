@@ -29,6 +29,8 @@ public class AutomatTradeScreen extends AbstractContainerScreen<AutomatTradeMenu
     private final ScrollController scrollController = new ScrollController();
     private final List<Button> tradeButtons = new ArrayList<>();
 
+    private int actionCooldown = 0;
+
     public AutomatTradeScreen(AutomatTradeMenu menu, Inventory inventory, Component title) {
         super(menu, inventory, title);
     }
@@ -70,8 +72,13 @@ public class AutomatTradeScreen extends AbstractContainerScreen<AutomatTradeMenu
             final int rowIndex = i;
 
             Button btn = Button.builder(Component.translatable("tradeautomat.trade"), button -> {
+                        if (this.actionCooldown > 0) return;
+
                         int rawTradeIndex = this.menu.getActualTradeIndex(rowIndex);
                         if (rawTradeIndex != -1 && this.menu.getBlockEntity() != null) {
+                            button.active = false;
+                            this.actionCooldown = 5;
+
                             ClientPlayNetworking.send(new ExecuteTradePayload(this.menu.getBlockEntity().getBlockPos(), rawTradeIndex));
                         }
                     })
@@ -80,6 +87,35 @@ public class AutomatTradeScreen extends AbstractContainerScreen<AutomatTradeMenu
 
             this.tradeButtons.add(btn);
             this.addRenderableWidget(btn);
+        }
+    }
+
+    @Override
+    protected void containerTick() {
+        super.containerTick();
+
+        if (this.actionCooldown > 0) {
+            this.actionCooldown--;
+        }
+
+        if (this.menu.getBlockEntity() == null) return;
+
+        int visibleRows = this.menu.getVisibleRowsCount();
+        for (int i = 0; i < visibleRows; i++) {
+            if (i >= this.tradeButtons.size()) break;
+
+            Button btn = this.tradeButtons.get(i);
+            int rawTradeIndex = this.menu.getActualTradeIndex(i);
+
+            if (rawTradeIndex != -1) {
+                btn.visible = true;
+                btn.active = this.actionCooldown == 0
+                        && this.minecraft != null
+                        && this.minecraft.player != null
+                        && this.menu.isTradeExecutableByRawIndex(rawTradeIndex, this.minecraft.player);
+            } else {
+                btn.visible = false;
+            }
         }
     }
 
@@ -93,7 +129,6 @@ public class AutomatTradeScreen extends AbstractContainerScreen<AutomatTradeMenu
         int panelHeight = this.menu.getDynamicPanelHeight();
 
         GuiRenderUtils.drawMenu(graphics, x, y, panelWidth, panelHeight);
-
         GuiRenderUtils.drawMenuSlots(graphics, x, y, this.menu);
 
         if (this.menu.getBlockEntity() == null) return;
@@ -108,22 +143,9 @@ public class AutomatTradeScreen extends AbstractContainerScreen<AutomatTradeMenu
 
         for (int i = 0; i < visibleRows; i++) {
             int rawTradeIndex = this.menu.getActualTradeIndex(i);
-            Button btn = i < this.tradeButtons.size() ? this.tradeButtons.get(i) : null;
-
             if (rawTradeIndex != -1) {
                 int rowY = y + 18 + i * 22;
                 GuiRenderUtils.drawArrow(graphics, arrowX, rowY + 2);
-
-                if (btn != null) {
-                    btn.visible = true;
-                    btn.active = this.minecraft != null
-                            && this.minecraft.player != null
-                            && this.menu.isTradeExecutableByRawIndex(rawTradeIndex, this.minecraft.player);
-                }
-            } else {
-                if (btn != null) {
-                    btn.visible = false;
-                }
             }
         }
 

@@ -150,15 +150,17 @@ public class AutomatTradeMenu extends AbstractContainerMenu {
         TradeOffer offer = trades.get(rawTradeIndex);
         if (offer == null || !offer.isValid() || !offer.isActive()) return false;
 
+        if (!TradeUtils.hasEnoughItemsForOffer(player, offer)) {
+            return false;
+        }
+
         for (ItemStack output : offer.getOutputs()) {
             if (!output.isEmpty() && !blockEntity.hasProductInStock(output)) {
                 return false;
             }
         }
 
-        if (!blockEntity.canAcceptTradeInputs(offer)) return false;
-
-        return TradeUtils.hasEnoughItemsForOffer(player, offer);
+        return blockEntity.canAcceptTradeInputs(offer);
     }
 
     public void setScrollOffset(int scrollOffset) {

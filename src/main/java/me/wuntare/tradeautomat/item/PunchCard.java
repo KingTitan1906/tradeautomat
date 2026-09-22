@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 
 public class PunchCard extends Item {
     public PunchCard(Properties props) {
-        props.stacksTo(64);
+        props.stacksTo(1);
         props.component(ModDataComponents.CODE, "00000000");
         super(props);
     }
