@@ -85,7 +85,7 @@ public class ModNetworking {
 
                             @Override
                             public Component getDisplayName() {
-                                return Component.literal("Trade Setup");
+                                return Component.translatable("tradeautomat.trade_setup");
                             }
 
                             @Override

@@ -1,5 +1,6 @@
 package me.wuntare.tradeautomat.gui;
 
+import me.wuntare.tradeautomat.block.RestrictedBlockItem;
 import me.wuntare.tradeautomat.block.entity.TradeAutomatEntity;
 import me.wuntare.tradeautomat.item.ModuleStorage;
 import me.wuntare.tradeautomat.registry.ModMenuTypes;
@@ -138,6 +139,9 @@ public class AutomatStorageMenu extends AbstractContainerMenu {
                 this.addSlot(new Slot(container, slotIndex, xOffset + column * 18, yOffset + row * 18) {
                     @Override
                     public boolean mayPlace(ItemStack stack) {
+                        if (stack.getItem() instanceof RestrictedBlockItem) {
+                            return false;
+                        }
                         if (!useUnlocked) return true;
                         else {
                             return slotIndex < unlockedSlots.get();

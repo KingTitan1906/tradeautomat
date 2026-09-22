@@ -107,7 +107,7 @@ public class EngineeringTerminalCategory implements IRecipeCategory<RecipeHolder
         Font font = Minecraft.getInstance().font;
         if (recipe.requires_code()) {
             Component codeText = Component.translatable("tradeautomat.recipe.code_display", recipe.min_code(), recipe.max_code());
-            guiGraphics.text(font, codeText, 10, 42, 0xFF000000, false);
+            guiGraphics.text(font, codeText, 10, 42, 0xFFAAAAAA, false);
         } else {
             Component codeNotNeeded = Component.translatable("tradeautomat.recipe.code_not_needed");
             guiGraphics.text(font, codeNotNeeded, 10, 42, 0xFFAAAAAA, false);

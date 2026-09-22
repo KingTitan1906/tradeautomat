@@ -221,7 +221,7 @@ public class TradeAutomat extends BaseEntityBlock {
 
                 @Override
                 public Component getDisplayName() {
-                    return Component.literal("Trade Automat");
+                    return Component.translatable("block.tradeautomat.trade_automat");
                 }
 
                 @Override

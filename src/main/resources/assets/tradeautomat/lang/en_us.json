@@ -13,12 +13,15 @@
   "item.tradeautomat.module_offer.tooltip": "Module level: %s",
   "item.tradeautomat.punch_card.tooltip": "Code: %s",
 
+  "tradeautomat.trade": "Trade",
+  "tradeautomat.trades": "Trades",
+  "tradeautomat.trade_setup": "Trade setup",
   "tradeautomat.setup_password": "Setup Password",
   "tradeautomat.enter_code": "Enter Code",
   "tradeautomat.edit_code": "Edit Code",
   "tradeautomat.submit": "Submit",
   "tradeautomat.inventory": "Inventory",
-  "tradeautomat.tab": "Trade Automat Tab",
+  "tradeautomat.tab": "Trade Automat",
 
   "message.tradeautomat.no_trades": "There are no available offers for this Trade automat.",
 
@@ -26,5 +29,7 @@
   "tradeautomat.recipe.code_not_needed": "Code not required",
   "tradeautomat.recipe.code_needed": "An 8-digit code is required for this recipe",
   "tradeautomat.recipe.code_range": "Range: §e%s§7 - §e%s",
-  "tradeautomat.recipe.work_without_code": "This recipe works without entering a code"
+  "tradeautomat.recipe.work_without_code": "This recipe works without entering a code",
+
+  "modmenu.descriptionTranslation.tradeautomat": "TradeAutomat adds vending machines and an engineering terminal to Minecraft for convenient and secure automated item trading, with support for Data Components and JEI!"
 }

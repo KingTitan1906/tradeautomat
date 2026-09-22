@@ -26,7 +26,7 @@ public class AutomatHubScreen extends Screen {
         int buttonWidth = 130;
         int buttonHeight = 20;
 
-        this.addRenderableWidget(Button.builder(Component.literal("Trades"), button -> {
+        this.addRenderableWidget(Button.builder(Component.translatable("tradeautomat.trades"), button -> {
                     ClientPlayNetworking.send(new SelectMenuPayload(this.pos, 0));
                 })
                 .bounds(centerX - buttonWidth / 2, centerY - 35, buttonWidth, buttonHeight)

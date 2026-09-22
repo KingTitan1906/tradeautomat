@@ -36,7 +36,9 @@ public class AutomatTradeScreen extends AbstractContainerScreen<AutomatTradeMenu
     public int getDynamicPanelWidth() {
         int inputsWidth = this.menu.getActualInputSlots() * 18;
         int outputsWidth = this.menu.getActualOutputSlots() * 18;
-        return PADDING_LEFT + inputsWidth + ARROW_GAP + outputsWidth + BUTTON_GAP + BUTTON_WIDTH + SCROLLBAR_GAP + SCROLLBAR_WIDTH + PADDING_RIGHT;
+        int calculatedWidth = PADDING_LEFT + inputsWidth + ARROW_GAP + outputsWidth + BUTTON_GAP + BUTTON_WIDTH + SCROLLBAR_GAP + SCROLLBAR_WIDTH + PADDING_RIGHT;
+
+        return Math.max(176, calculatedWidth);
     }
 
     @Override
@@ -67,7 +69,7 @@ public class AutomatTradeScreen extends AbstractContainerScreen<AutomatTradeMenu
         for (int i = 0; i < visibleRows; i++) {
             final int rowIndex = i;
 
-            Button btn = Button.builder(Component.literal("Trade"), button -> {
+            Button btn = Button.builder(Component.translatable("tradeautomat.trade"), button -> {
                         int rawTradeIndex = this.menu.getActualTradeIndex(rowIndex);
                         if (rawTradeIndex != -1 && this.menu.getBlockEntity() != null) {
                             ClientPlayNetworking.send(new ExecuteTradePayload(this.menu.getBlockEntity().getBlockPos(), rawTradeIndex));

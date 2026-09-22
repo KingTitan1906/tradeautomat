@@ -3,7 +3,7 @@
 	"id": "tradeautomat",
 	"version": "${version}",
 	"name": "TradeAutomat",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "TradeAutomat adds vending machines and an engineering terminal to Minecraft for convenient and secure automated item trading, with support for Data Components and JEI!",
 	"authors": [
 		"Wuntare"
 	],
@@ -24,7 +24,9 @@
           "me.wuntare.tradeautomat.compat.jei.JeiPlugin"
         ]
 	},
-	"mixins": [],
+	"mixins": [
+      "tradeautomat.mixins.json"
+    ],
 	"depends": {
 		"fabricloader": ">=0.19.5",
 		"minecraft": "~26.2",

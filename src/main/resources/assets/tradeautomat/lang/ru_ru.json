@@ -1,0 +1,35 @@
+{
+  "block.tradeautomat.trade_automat": "Торговый автомат",
+  "block.tradeautomat.trade_automat.storage": "Хранилище автомата",
+  "block.tradeautomat.engineering_terminal": "Терминал инженера",
+
+  "item.tradeautomat.module_storage": "Модуль хранилище",
+  "item.tradeautomat.module_trade": "Модуль торговли",
+  "item.tradeautomat.module_offer": "Модуль предложеня",
+  "item.tradeautomat.punch_card": "Перфокарта",
+
+  "item.tradeautomat.module_storage.tooltip": "Уровень модуля: %s",
+  "item.tradeautomat.module_trade.tooltip": "Уровень модуля: %s",
+  "item.tradeautomat.module_offer.tooltip": "Уровень модуля: %s",
+  "item.tradeautomat.punch_card.tooltip": "Код: %s",
+
+  "tradeautomat.trade": "Торговать",
+  "tradeautomat.trades": "Сделки",
+  "tradeautomat.trade_setup": "Настройка сделок",
+  "tradeautomat.setup_password": "Установить пароль",
+  "tradeautomat.enter_code": "Введите код",
+  "tradeautomat.edit_code": "Изменить код",
+  "tradeautomat.submit": "Подтвердить",
+  "tradeautomat.inventory": "Инвентарь",
+  "tradeautomat.tab": "Торговый автомат",
+
+  "message.tradeautomat.no_trades": "Для этого торгового автомата нет доступных предложений.",
+
+  "tradeautomat.recipe.code_display": "Код: %s - %s",
+  "tradeautomat.recipe.code_not_needed": "Код не требуется",
+  "tradeautomat.recipe.code_needed": "Для этого рецепта требуется 8-значный код.",
+  "tradeautomat.recipe.code_range": "Диапазон: §e%s§7 - §e%s",
+  "tradeautomat.recipe.work_without_code": "Этот рецепт работает без ввода кода",
+
+  "modmenu.descriptionTranslation.tradeautomat": "TradeAutomat добавляет в Minecraft торговые автоматы и инженерный терминал для удобной и безопасной автоматической торговли предметами с поддержкой Data Components и JEI!"
+}
