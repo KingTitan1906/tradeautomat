@@ -21,14 +21,6 @@
 
 ---
 
-## 📷 Showcase
-
-*(Add your demo GIF or screenshots here)*
-
-![Trade Automat Showcase](https://raw.githubusercontent.com/your-username/tradeautomat/main/assets/demo.gif)
-
----
-
 ## ⚙️ Requirements & Installation
 
 ### Requirements
