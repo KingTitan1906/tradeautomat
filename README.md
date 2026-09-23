@@ -1,9 +1,45 @@
-# TradeAutomat
+# 🛒 Trade Automat
 
-## Setup
+**Trade Automat** is a Minecraft mod that adds automated trading machines and Engineering Terminals to build a seamless, player-driven economy on your server or in singleplayer.
 
-For setup instructions, please see the [Fabric Documentation page](https://docs.fabricmc.net/develop/getting-started/creating-a-project#setting-up) related to the IDE that you are using.
+---
 
-## License
+## ✨ Features
 
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+* 🤖 **Trade Automats (`Trade Automat`)**:
+  * Fully automated buying and selling of items.
+  * Smart inventory handling — if the player's inventory is full, purchased items safely drop on the ground.
+  * Easy trade configuration and stock management.
+
+* 🛠️ **Engineering Terminals (`Engineering Terminal`)**:
+  * Custom terminal for item crafting and modification.
+  * Full **Item Components** support (preserves durability, custom data, components, etc.).
+
+* 🔍 **JEI (Just Enough Items) Integration**:
+  * Displays all Engineering Terminal recipes directly inside the JEI interface.
+  * Clear overview of required ingredients and outputs.
+
+---
+
+## ⚙️ Requirements & Installation
+
+### Requirements
+* **Minecraft**: `26.2`
+* **Java**: `26`
+* **JEI (Just Enough Items)** *(optional, for viewing recipes)*
+
+### Installation
+1. Download the latest version from [Releases](../../releases) (or Modrinth).
+2. Place the `.jar` file into your `mods` folder.
+3. Launch the game!
+
+---
+
+## 🛠️ Building from Source
+
+To compile the project yourself:
+
+```bash
+git clone [https://github.com/your-username/tradeautomat.git](https://github.com/your-username/tradeautomat.git)
+cd tradeautomat
+./gradlew build
