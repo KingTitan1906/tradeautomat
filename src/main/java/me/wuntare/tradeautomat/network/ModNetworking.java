@@ -16,6 +16,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ModNetworking {
 
     public static void registerPackets() {
@@ -116,39 +119,42 @@ public class ModNetworking {
 
                 int rawIndex = payload.tradeIndex();
 
+                if (rawIndex < 0 || rawIndex >= te.getUnlockedTradeOffers() || rawIndex >= te.getTrades().size()) return;
+
                 if (!menu.isTradeExecutableByRawIndex(rawIndex, player)) return;
 
                 TradeOffer offer = te.getTrades().get(rawIndex);
+                if (offer == null || !offer.isValid() || !offer.isActive()) return;
 
-                for (ItemStack input : offer.getInputs()) {
-                    if (!input.isEmpty()) {
-                        int countInInventory = player.getInventory().clearOrCountMatchingItems(
-                                stack -> ItemStack.isSameItemSameComponents(stack, input),
-                                0,
-                                player.inventoryMenu.getCraftSlots()
-                        );
+                if (!te.hasProductsInStock(offer.getOutputs())) return;
+                if (!te.canAcceptTradeInputs(offer)) return;
 
-                        if (countInInventory < input.getCount()) {
-                            menu.broadcastChanges();
-                            player.containerMenu.sendAllDataToRemote();
-                            return;
-                        }
+                List<ItemStack> aggregatedInputs = aggregateItemStacks(offer.getInputs());
+
+                for (ItemStack input : aggregatedInputs) {
+                    int countInInventory = player.getInventory().clearOrCountMatchingItems(
+                            stack -> ItemStack.isSameItemSameComponents(stack, input),
+                            0,
+                            player.inventoryMenu.getCraftSlots()
+                    );
+
+                    if (countInInventory < input.getCount()) {
+                        menu.broadcastChanges();
+                        player.containerMenu.sendAllDataToRemote();
+                        return;
                     }
                 }
 
-                for (ItemStack input : offer.getInputs()) {
-                    if (!input.isEmpty()) {
-                        int removed = player.getInventory().clearOrCountMatchingItems(
-                                stack -> ItemStack.isSameItemSameComponents(stack, input),
-                                input.getCount(),
-                                player.inventoryMenu.getCraftSlots()
-                        );
+                for (ItemStack input : aggregatedInputs) {
+                    int removed = player.getInventory().clearOrCountMatchingItems(
+                            stack -> ItemStack.isSameItemSameComponents(stack, input),
+                            input.getCount(),
+                            player.inventoryMenu.getCraftSlots()
+                    );
 
-                        if (removed > 0) {
-                            ItemStack payment = input.copy();
-                            payment.setCount(removed);
-                            te.depositPayment(payment);
-                        }
+                    if (removed > 0) {
+                        ItemStack payment = input.copyWithCount(removed);
+                        te.depositPayment(payment);
                     }
                 }
 
@@ -191,5 +197,23 @@ public class ModNetworking {
                 te.setChanged();
             });
         });
+    }
+    private static List<ItemStack> aggregateItemStacks(List<ItemStack> stacks) {
+        List<ItemStack> aggregated = new ArrayList<>();
+        for (ItemStack stack : stacks) {
+            if (stack.isEmpty()) continue;
+            boolean merged = false;
+            for (ItemStack agg : aggregated) {
+                if (ItemStack.isSameItemSameComponents(agg, stack)) {
+                    agg.grow(stack.getCount());
+                    merged = true;
+                    break;
+                }
+            }
+            if (!merged) {
+                aggregated.add(stack.copy());
+            }
+        }
+        return aggregated;
     }
 }

@@ -262,7 +262,6 @@ public class TradeAutomatEntity extends BlockEntity implements ExtendedMenuProvi
                     slot.grow(transfer);
                     stackToAdd.shrink(transfer);
                     if (stackToAdd.isEmpty()) {
-                        syncToClient();
                         return true;
                     }
                 }
@@ -273,12 +272,10 @@ public class TradeAutomatEntity extends BlockEntity implements ExtendedMenuProvi
             if (this.invInput.getItem(i).isEmpty()) {
                 this.invInput.setItem(i, stackToAdd.copy());
                 stackToAdd.setCount(0);
-                syncToClient();
                 return true;
             }
         }
 
-        syncToClient();
         return stackToAdd.isEmpty();
     }
 
@@ -293,7 +290,6 @@ public class TradeAutomatEntity extends BlockEntity implements ExtendedMenuProvi
                 if (toRemove <= 0) break;
             }
         }
-        syncToClient();
     }
 
     public SimpleContainer getInputContainer() { return invInput; }

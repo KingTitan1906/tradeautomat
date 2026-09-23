@@ -3,7 +3,10 @@
   "package": "me.wuntare.tradeautomat.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "SlotMixin"
+    "SlotMixin",
+    "DecoratedPotBlockMixin",
+    "ContainerMixin",
+    "ShelfBlockEntityMixin"
   ],
   "client": [],
   "injectors": {
