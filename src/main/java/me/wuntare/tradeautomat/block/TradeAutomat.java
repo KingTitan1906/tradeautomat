@@ -39,7 +39,6 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.Nullable;
@@ -48,6 +47,10 @@ public class TradeAutomat extends BaseEntityBlock {
     public static final EnumProperty<Direction> FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final IntegerProperty OFFSET_X = IntegerProperty.create("offset_x", 0, 2);
     public static final IntegerProperty OFFSET_Y = IntegerProperty.create("offset_y", 0, 1);
+    private static final VoxelShape SHAPE_NORTH = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0);
+    private static final VoxelShape SHAPE_SOUTH = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0);
+    private static final VoxelShape SHAPE_WEST  = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0);
+    private static final VoxelShape SHAPE_EAST  = Block.box(0.0, 0.0, 0.0, 16.0, 16.0, 16.0);
 
     public TradeAutomat(Properties settings) {
         settings.noOcclusion();
@@ -64,12 +67,12 @@ public class TradeAutomat extends BaseEntityBlock {
 
     @Override
     public boolean useShapeForLightOcclusion(BlockState state) {
-        return true;
+        return false;
     }
 
     @Override
     public float getShadeBrightness(BlockState state, BlockGetter level, BlockPos pos) {
-        return 0.8F;
+        return 1.0F;
     }
 
     @Override
@@ -289,7 +292,17 @@ public class TradeAutomat extends BaseEntityBlock {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return Shapes.block();
+    public @NotNull VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return switch (state.getValue(FACING)) {
+            case SOUTH -> SHAPE_SOUTH;
+            case WEST  -> SHAPE_WEST;
+            case EAST  -> SHAPE_EAST;
+            default    -> SHAPE_NORTH;
+        };
+    }
+
+    @Override
+    protected boolean propagatesSkylightDown(BlockState state) {
+        return true;
     }
 }
