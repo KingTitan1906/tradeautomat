@@ -40,6 +40,6 @@
 To compile the project yourself:
 
 ```bash
-git clone [https://github.com/your-username/tradeautomat.git](https://github.com/your-username/tradeautomat.git)
+git clone [https://github.com/KingTitan1906/tradeautomat.git](https://github.com/KingTitan1906/tradeautomat.git)
 cd tradeautomat
 ./gradlew build
